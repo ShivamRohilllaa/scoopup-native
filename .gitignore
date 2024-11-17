@@ -1,0 +1,38 @@
+# Node modules
+node_modules/
+
+# React Native specific
+android/.gradle/
+android/app/build/
+android/build/
+ios/Pods/
+ios/build/
+ios/*.xcodeproj/
+ios/*.xcworkspace/
+
+# Build output
+/dist/
+/build/
+
+# Debug and Logs
+*.log
+*.log.*
+*.swp
+*.swo
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Misc
+*.jks
+*.keystore
+.env
+
+# Expo
+.expo/
+.expo-shared/
+
+# NPM package-lock and yarn lock
+package-lock.json
+yarn.lock
