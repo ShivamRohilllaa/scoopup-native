@@ -16,11 +16,14 @@ import SignInScreen from "./Signin";
 import api from "../core/api";
 import utils from "../core/utils";
 import HomeScreen from './Home';
+import useGlobal from "../core/global";
 
 
 function loginscreen({ navigation }) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+
+    const login = useGlobal(state => state.login)
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -47,7 +50,8 @@ function loginscreen({ navigation }) {
         console.log('login data', response.data)
         // Alert.alert("Success", "Login successful!");
         // Redirect user to home/dashboard (replace 'Home' with your actual screen)
-        navigation.navigate("Home");
+        // navigation.navigate("Home");
+        login(response.data)
     })
     .catch((error) => {
         if (error.response) {

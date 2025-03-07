@@ -18,12 +18,14 @@
     "@react-navigation/native-stack": "^7.1.1",
     "@react-navigation/stack": "^7.0.6",
     "axios": "^1.8.1",
+    "ls": "^0.2.1",
     "react": "18.3.1",
     "react-native": "0.76.2",
     "react-native-image-picker": "^7.2.2",
     "react-native-safe-area-context": "^4.14.0",
     "react-native-screens": "^4.3.0",
-    "react-native-svg": "^15.9.0"
+    "react-native-svg": "^15.9.0",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

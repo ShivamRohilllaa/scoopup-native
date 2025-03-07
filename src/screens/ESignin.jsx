@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import loginscreen from "./login";
 import api from "../core/api";
+import useGlobal from "../core/global";
 
 
 function ESignInScreen({ navigation }) {
@@ -20,6 +21,7 @@ function ESignInScreen({ navigation }) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const login = useGlobal(state => state.login)
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -55,6 +57,8 @@ function ESignInScreen({ navigation }) {
                 console.log("Signup Success:", response.data);
                 Alert.alert("Success", "Account created! You can now sign in.");
                 navigation.navigate("login"); // Redirect to login screen
+                login(response.data)
+
             })
             .catch((error) => {
                 if (error.response) {
