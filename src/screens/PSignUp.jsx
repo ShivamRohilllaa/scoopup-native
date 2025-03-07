@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect } from "react";
-import { SafeAreaView, View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert } from "react-native";
+import { SafeAreaView, View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert, TouchableWithoutFeedback, Keyboard } from "react-native";
 import OTPScreen from "./Otp";
 
 function PhoneNumberSignUp({ navigation }) {
@@ -22,36 +22,38 @@ function PhoneNumberSignUp({ navigation }) {
 
     return (
         <SafeAreaView style={styles.container}>
-            {/* Back Button */}
-            <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-                <Text style={styles.backButtonText}>{"<"} Back</Text>
-            </TouchableOpacity>
-
-            <View style={styles.centeredContent}>
-                <Text style={styles.title}>My mobile</Text>
-                <Text style={styles.sub_title}>Please enter your valid phone number. We will send you a 4-digit code to verify your account. </Text>
-
-                <View style={styles.phoneInputContainer}>
-                    <Image
-                        source={require("../assets/india.png")} // Add the flag image to your assets folder
-                        style={styles.flagIcon}
-                    />
-                    <Text style={styles.countryCode}>+91</Text>
-                    <TextInput
-                        style={styles.phoneInput}
-                        placeholder="9540xxxxxx"
-                        placeholderTextColor="#aaa"
-                        keyboardType="number-pad"
-                        maxLength={10}
-                        value={phoneNumber}
-                        onChangeText={setPhoneNumber}
-                    />
-                </View>
-
-                <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-                    <Text style={styles.buttonText}>Continue</Text>
+            
+                {/* Back Button */}
+                <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+                    <Text style={styles.backButtonText}>{"<"} Back</Text>
                 </TouchableOpacity>
-            </View>
+                {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */}
+                <View style={styles.centeredContent}>
+                    <Text style={styles.title}>My mobile</Text>
+                    <Text style={styles.sub_title}>Please enter your valid phone number. We will send you a 4-digit code to verify your account. </Text>
+
+                    <View style={styles.phoneInputContainer}>
+                        <Image
+                            source={require("../assets/india.png")} // Add the flag image to your assets folder
+                            style={styles.flagIcon}
+                        />
+                        <Text style={styles.countryCode}>+91</Text>
+                        <TextInput
+                            style={styles.phoneInput}
+                            placeholder="9540xxxxxx"
+                            placeholderTextColor="#aaa"
+                            keyboardType="number-pad"
+                            maxLength={10}
+                            value={phoneNumber}
+                            onChangeText={setPhoneNumber}
+                        />
+                    </View>
+
+                    <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+                        <Text style={styles.buttonText}>Continue</Text>
+                    </TouchableOpacity>
+                </View>
+                {/* </TouchableWithoutFeedback> */}
         </SafeAreaView>
     );
 }

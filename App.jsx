@@ -13,6 +13,7 @@ import ESignInScreen from './src/screens/ESignin';
 import loginscreen from './src/screens/login';
 import PhoneNumberSignUp from './src/screens/PSignUp';
 import OTPScreen from './src/screens/Otp';
+import ProfileScreen from './src/screens/Profiledetail';
 
 
 const LightTheme = {
@@ -52,6 +53,7 @@ function App() {
           ) : (
           <>
           <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Profiledetail" component={ProfileScreen} />
           <Stack.Screen name="Search" component={SearchScreen} />
           <Stack.Screen name="Messages" component={MessageScreen} />
           </>
