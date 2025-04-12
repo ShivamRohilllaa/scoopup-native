@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView, StatusBar } from 'react-native';
 import './src/core/fontawesome'
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
@@ -15,6 +15,7 @@ import PhoneNumberSignUp from './src/screens/PSignUp';
 import OTPScreen from './src/screens/Otp';
 import ProfileScreen from './src/screens/Profiledetail';
 import useGlobal from './src/core/global';
+import GenderSelectionScreen from './src/screens/Iam';
 
 const LightTheme = {
   ...DefaultTheme,
@@ -28,10 +29,16 @@ const Stack = createNativeStackNavigator();
 
 function App() {
 
-  const [initialized] = useState(true)
   // const [authenticated] = useState(false)
 
+  const initialized = useGlobal(state => state.initialized)
   const authenticated = useGlobal(state => state.authenticated)
+
+  const init = useGlobal(state => state.init)
+
+  useEffect(() => {
+    init()
+  }, [])
 
   return (
     <NavigationContainer theme={LightTheme}>
@@ -58,6 +65,7 @@ function App() {
           <Stack.Screen name="Profiledetail" component={ProfileScreen} />
           <Stack.Screen name="Search" component={SearchScreen} />
           <Stack.Screen name="Messages" component={MessageScreen} />
+          <Stack.Screen name="Iam" component={GenderSelectionScreen} />
           </>
           )}
           

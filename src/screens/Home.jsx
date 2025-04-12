@@ -1,160 +1,74 @@
-import { useLayoutEffect } from "react";
-import {
-  SafeAreaView,
-  TouchableOpacity,
-  View,
-  Image,
-  Animated,
-  PanResponder,
-  Dimensions,
-  StyleSheet,
-} from "react-native";
+import { useEffect,useLayoutEffect } from "react";
+import { SafeAreaView, TouchableOpacity, View, Image } from "react-native";
 import { Text } from "react-native";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import {
-  faArrowLeft,
-  faHeart,
-  faStar,
-  faFilter,
-} from "@fortawesome/free-solid-svg-icons";
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faBell, faInbox, faUser, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'; // Import icons
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import ProfileScreen from "./Profile";
+import RequestScreen from "./Requests";
+import FriendScreen from "./Friends";
+import useGlobal from "../core/global";
+
+const Tab = createBottomTabNavigator();
 
 function HomeScreen({ navigation }) {
+
+  const socketConnect = useGlobal(state => state.socketConnect)
+  const socketClose = useGlobal(state => state.socketClose)
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
     });
-  }, [navigation]);
+  }, []);
 
-  const cardScale = new Animated.Value(0); // Initialize card scale
-  const cardPosition = new Animated.ValueXY();
-
-  const panResponder = PanResponder.create({
-    onStartShouldSetPanResponder: () => true,
-    onPanResponderMove: Animated.event([null, { dx: cardPosition.x }], {
-      useNativeDriver: false,
-    }),
-    onPanResponderRelease: (evt, gestureState) => {
-      if (gestureState.dx > 120) {
-        Animated.timing(cardPosition, {
-          toValue: { x: SCREEN_WIDTH + 100, y: gestureState.dy },
-          duration: 200,
-          useNativeDriver: false,
-        }).start(() => {
-          // Handle like action, e.g., move to next card
-          cardPosition.setValue({ x: 0, y: 0 });
-        });
-      } else if (gestureState.dx < -120) {
-        Animated.timing(cardPosition, {
-          toValue: { x: -SCREEN_WIDTH - 100, y: gestureState.dy },
-          duration: 200,
-          useNativeDriver: false,
-        }).start(() => {
-          // Handle dismiss action, e.g., move to next card
-          cardPosition.setValue({ x: 0, y: 0 });
-        });
-      } else {
-        Animated.spring(cardPosition, {
-          toValue: { x: 0, y: 0 },
-          friction: 5,
-          useNativeDriver: false,
-        }).start();
-      }
-    },
-  });
+  useEffect(() => {
+    socketConnect()
+    return () => {
+      socketConnect()
+    }
+  }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          padding: 20,
-          alignItems: "center",
-        }}
-      >
-        <FontAwesomeIcon icon={faArrowLeft} size={22} color="#404040" />
-        <Text style={{ fontWeight: "bold", fontSize: 18 }}>SCOOP UP</Text>
-        <FontAwesomeIcon icon={faFilter} size={22} color="#404040" />
-      </View>
-      <Animated.View
-        {...panResponder.panHandlers}
-        style={[
-          styles.card,
-          {
-            transform: [
-              { translateX: cardPosition.x },
-              { ...cardPosition.getTranslateTransform() },
-            ],
-          },
-        ]}
-      >
-        <Image
-          source={require("../assets/profile.jpg")}
-          style={styles.image}
-        />
-        <View style={styles.distanceBox}>
-          <Text style={{ color: "black" }}>50 m</Text>
-        </View>
-        <View style={styles.info}>
-          <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-            Jessica Parker, 23
-          </Text>
-          <Text style={{ fontSize: 16 }}>Professional model</Text>
-        </View>
-        <View style={styles.actions}>
-          <TouchableOpacity style={styles.actionButton}>
-            <FontAwesomeIcon icon={faHeart} size={24} color="purple" />
+    <Tab.Navigator
+      screenOptions={({ route, navigation }) => ({
+        headerLeft: () => (
+            <View style={{marginLeft: 20}}>
+                <Image 
+                source={require('../assets/profile.jpg')} 
+                style={{ width:28, height:28}}
+                
+                />
+            </View>
+        ),
+        headerRight: () => (
+          <TouchableOpacity>
+            <FontAwesomeIcon
+            style={ {marginRight: 20}}
+              icon={faMagnifyingGlass}  // Use the imported icon here
+              size={22}
+              color='#404040'
+            />
           </TouchableOpacity>
-        </View>
-      </Animated.View>
-      {/* Bottom Navigation Bar Placeholder */}
-      <View
-        style={{
-          height: 60,
-          backgroundColor: "lightgray",
-          flexDirection: "row",
-          justifyContent: "space-around",
-          alignItems: "center",
-        }}
-      >
-        {/* Placeholder icons, adjust as needed */}
-        <FontAwesomeIcon icon={faHeart} size={24} color="purple" />
-      </View>
-    </SafeAreaView>
+        ),
+        tabBarIcon: ({ focused, color, size }) => {
+          const icons = {
+            Requests: faBell,
+            Friend: faInbox,
+            Profile: faUser,
+          };
+          const icon = icons[route.name];
+          return <FontAwesomeIcon icon={icon} size={28} color={color} />;
+        },
+        tabBarActiveTintColor: '#202020',
+        tabBarShowLabel: false,
+      })}
+    >
+      <Tab.Screen name="Requests" component={RequestScreen} />
+      <Tab.Screen name="Friend" component={FriendScreen} />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
+    </Tab.Navigator>
   );
 }
-
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: "white",
-    borderRadius: 20,
-    height: SCREEN_HEIGHT * 0.7,
-    width: SCREEN_WIDTH * 0.9,
-    alignSelf: "center",
-  },
-  image: {
-    width: "100%",
-    height: "80%",
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-  },
-  distanceBox: {
-    position: "absolute",
-    bottom: "22%",
-    left: "5%",
-    backgroundColor: "white",
-    borderRadius: 10,
-    padding: 8,
-  },
-  info: {
-    padding: 20,
-  },
-  actions: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginTop: 10,
-  },
-});
 
 export default HomeScreen;

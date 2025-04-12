@@ -48,10 +48,14 @@ function loginscreen({ navigation }) {
     })
     .then(response => {
         console.log('login data', response.data)
+        const credentials = {
+            username: username,
+            password: password,
+        }
         // Alert.alert("Success", "Login successful!");
         // Redirect user to home/dashboard (replace 'Home' with your actual screen)
         // navigation.navigate("Home");
-        login(response.data)
+        login(credentials, response.data.user)
     })
     .catch((error) => {
         if (error.response) {

@@ -54,10 +54,14 @@ function ESignInScreen({ navigation }) {
             },
         })
             .then((response) => {
+                const credentials = {
+                    username: username,
+                    password: password,
+                }
                 console.log("Signup Success:", response.data);
                 Alert.alert("Success", "Account created! You can now sign in.");
                 navigation.navigate("login"); // Redirect to login screen
-                login(response.data)
+                login(credentials, response.data.user)
 
             })
             .catch((error) => {
